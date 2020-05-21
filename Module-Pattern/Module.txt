@@ -1,0 +1,11 @@
+1. Maintainablity
+
+
+2. NameSpace
+     global variables
+     "NameSpace pollution"
+
+3.Resuablity
+
+
+User module.exports to export a module
