@@ -6,6 +6,8 @@ Website : http://arslanismail.com/
 
 # JavaScript Design Patterns Reffrence
 
+[![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
+
 This Project Is For Helping Developers To Go Through Diffrent JavaScript Design Patterns
 via Examples And Explanations Save This Repo As A Reffrence.
 
@@ -24,7 +26,11 @@ via Examples And Explanations Save This Repo As A Reffrence.
 - `NameSpace` - By Module System we can avoid Global Namespace conflict issue files only require modules exported with module.exports and avoid polluting global Namespace.
 - `Resuablity` - With Module System in place your code becomes very re-useable we can import specif module in multiple files and can enhance thier functionality
 
-##### Module System Example :
+##### Module System Example
+
+Following is the example code to understand module system in javascript
+
+###### Module-Pattern.js:
 
 Module-Pattern.js File this is the file (This is the Module That will be exported and consumed by another file)
 
@@ -43,6 +49,8 @@ class Course {
 module.exports = Course;
 ```
 
+###### Module-consumer.js:
+
 Module-consumer.js File this is the file that will consume the Course Class from Module-Pattern.js file
 
 ```javascript
@@ -59,6 +67,101 @@ course_1.toString();
 - `Adding Layer` - Factory Pattern Allows us to seprate the object creation from its implementation
 - `Conditional` - To create a different instance based on condition
 - `Abstraction` - Not To Expose the constructors of the objects, preventing their modification
+
+##### Factory Pattern Example:
+
+Following code files are the example for the factory pattern, let's take a use case that there are diffrent type of users and we have to create them via single function it makes sense to use factory pattern here .
+Suppose we have User of type student and instructor that inherit Person class for commanalities and user factory that will generate and return new object of type student or instructor depends on the given condition.
+
+###### Person.js:
+
+```javascript
+class Person {
+  constructor(name) {
+    this.name = name;
+  }
+}
+module.exports = Person;
+```
+
+###### student.js:
+
+```javascript
+const Person = require("./person");
+
+class Student extends Person {
+  constructor(name, level) {
+    super(name);
+    this.level = level;
+  }
+
+  toString() {
+    return JSON.stringify(this);
+  }
+}
+
+module.exports = Student;
+```
+
+###### instructor.js:
+
+```javascript
+const Person = require("./person");
+
+class Instructor extends Person {
+  constructor(name, possition, earning) {
+    super(name);
+    this.possition = possition;
+    this.earning = earning;
+  }
+
+  toString() {
+    return JSON.stringify(this);
+  }
+}
+
+module.exports = Instructor;
+```
+
+###### userFactory.js:
+
+```javascript
+const Instructor = require("./instructor");
+const Student = require("./student");
+
+const UserFactory = (
+  type,
+  name,
+  position,
+  earnings = 0,
+  level = "Beginner"
+) => {
+  switch (type) {
+    case "instructor":
+      return new Instructor(name, position, earnings);
+      break;
+    case "student":
+      return new Student(name, level);
+      break;
+    default:
+      return null;
+  }
+};
+
+module.exports = UserFactory;
+```
+
+###### main.js:
+
+```javascript
+const UserFactory = require("./userFactory");
+
+const arslan = UserFactory("instructor", "Arslan", "Software Engineer", 1000);
+const rasheed = UserFactory("student", "Rasheed", "Beginner");
+
+console.log(arslan.toString());
+console.log(rasheed.toString());
+```
 
 ---
 
