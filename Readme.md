@@ -195,3 +195,75 @@ if (buyFirst === buySecond) {
   console.log("single instance for both objects");
 }
 ```
+
+---
+
+### Builder Pattern
+
+- `Simplification` - To simplify the construction of complex objects
+- `Sepration` - To seprate the construction and representation
+
+##### Builder Pattern Example:
+
+###### course.js:
+
+```javascript
+class Course {
+  constructor(builder) {
+    this.name = builder.name;
+    this.sales = builder.sales || 0;
+    this.isFree = builder.isFree;
+    this.price = builder.price || 0;
+    this.isCampain = builder.isCampain;
+  }
+
+  toString() {
+    return console.log(JSON.stringify(this));
+  }
+}
+
+module.exports = Course;
+```
+
+###### courseBuilder.js:
+
+```javascript
+const Course = require("./course");
+
+class CourseBuilder {
+  constructor(name, sales = 0, price = 0) {
+    this.name = name;
+    this.sales = sales;
+    this.price = price;
+  }
+  makePaid(price) {
+    this.isFree = false;
+    this.price = price;
+    return this;
+  }
+  makeCampain() {
+    this.isCampain = true;
+    return this;
+  }
+  build() {
+    return new Course(this);
+  }
+}
+
+module.exports = CourseBuilder;
+```
+
+###### main.js:
+
+```javascript
+const CourseBuilder = require("./courseBuilder.js");
+
+const course_1 = new CourseBuilder("Design Patterns 1")
+  .makePaid(100)
+  .makeCampain()
+  .build();
+const course_2 = new CourseBuilder("Design Patterns 2").build();
+
+course_1.toString();
+course_2.toString();
+```
